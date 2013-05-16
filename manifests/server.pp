@@ -12,6 +12,10 @@
 #     default  [ 'my_cluster', ]
 #     array of the names of the clusters to publish metrics of
 #
+#   $enable_service
+#     default  'true'
+#     Enable service at boot. Must be false if service is controlled by a resource manager, i.e. Pacemaker.
+#
 # Actions:
 #   installs the ganglia server
 #
@@ -21,6 +25,7 @@
 class ganglia::server (
   $clusters = [{cluster_name => 'my_cluster', cluster_hosts => [{address => 'localhost', port => '8649'}]}],
   $gridname = '',
+  $enable_service = true,
   ) {
 
   include ganglia::client
@@ -33,6 +38,7 @@ class ganglia::server (
   }
 
   service {$ganglia_server_pkg:
+    enable  => $enable_service,
     require => Package[$ganglia_server_pkg];
   }
 

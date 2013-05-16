@@ -1,0 +1,181 @@
+<?php
+# $Id: conf.php.in 2194 2010-01-08 16:58:25Z d_pocock $
+#
+# Gmetad-webfrontend version. Used to check for updates.
+#
+include_once "./version.php";
+
+#
+# The name of the directory in "./templates" which contains the
+# templates that you want to use. Templates are like a skin for the
+# site that can alter its look and feel.
+#
+$template_name = "<%= @template_name %>";
+
+#
+# If you installed gmetad in a directory other than the default
+# make sure you change it here.
+#
+
+# Where gmetad stores the rrd archives.
+$gmetad_root = "<%= @gmetad_root %>";
+$rrds = "<%= @rrds %>";
+
+# Leave this alone if rrdtool is installed in $gmetad_root,
+# otherwise, change it if it is installed elsewhere (like /usr/bin)
+define("RRDTOOL", "<%= @rrdtool %>");
+
+# If rrdcached is being used, this argument must specify the 
+# socket to use.
+#
+# ganglia-web only requires, and should use, the low-privilege socket
+# created with the -L option to rrdcached.  gmetad requires, and must use,
+# the fully privileged socket created with the -l option to rrdcached.
+$rrdcached_socket = "<%= @rrdcached_socket %>";
+
+# Location for modular-graph files.
+$graphdir="<%= @graphdir %>";
+
+#
+# If you want to grab data from a different ganglia source specify it here.
+# Although, it would be strange to alter the IP since the Round-Robin
+# databases need to be local to be read. 
+#
+$ganglia_ip = "<%= @ganglia_ip %>";
+$ganglia_port = "<%= @ganglia_port %>";
+
+#
+# The maximum number of dynamic graphs to display.  If you set this
+# to 0 (the default) all graphs will be shown.  This option is
+# helpful if you are viewing the web pages from a browser with a 
+# small pipe.
+#
+$max_graphs = "<%= @max_graphs %>";
+
+#
+# In the Cluster View this sets the default number of columns used to
+# display the host grid below the summary graphs.
+#
+$hostcols = "<%= @hostcols %>";
+
+#
+# In the Host View this sets the default number of columns used to
+# display the metric grid below the summary graphs.
+#
+$metriccols = "<%= @metriccols %>";
+
+#
+# Turn on and off the Grid Snapshot. Now that we have a
+# hierarchical snapshot (per-cluster instead of per-node) on
+# the meta page this makes more sense. Most people will want this
+# on.
+#
+$show_meta_snapshot = "<% if @show_meta_snapshot %>yes<% else %>no<% end %>";
+
+# 
+# The default refresh frequency on pages.
+#
+$default_refresh = "<%= @default_refresh %>";
+
+#
+# Colors for the CPU report graph
+#
+$cpu_user_color = "<%= @cpu_user_color %>";
+$cpu_nice_color = "<%= @cpu_nice_color %>";
+$cpu_system_color = "<%= @cpu_system_color %>";
+$cpu_wio_color = "<%= @cpu_wio_color %>";
+$cpu_idle_color = "<%= @cpu_idle_color %>";
+
+#
+# Colors for the MEMORY report graph
+#
+$mem_used_color = "<%= @mem_used_color %>";
+$mem_shared_color = "<%= @mem_shared_color %>";
+$mem_cached_color = "<%= @mem_cached_color %>";
+$mem_buffered_color = "<%= @mem_buffered_color %>";
+$mem_free_color = "<%= @mem_free_color %>";
+$mem_swapped_color = "<%= @mem_swapped_color %>";
+
+#
+# Colors for the LOAD report graph
+#
+$load_one_color = "<%= @load_one_color %>";
+$proc_run_color = "<%= @proc_run_color %>";
+$cpu_num_color  = "<%= @cpu_num_color  %>";
+$num_nodes_color = "<%= @num_nodes_color %>";
+
+# Other colors
+$jobstart_color = "<%= @jobstart_color %>";
+
+#
+# Colors for the load ranks.
+#
+$load_colors = array(
+<% @load_colors.each do |k,v| -%>
+   "<%= k %>" => "<%= v %>",
+<% end -%>
+);
+
+#
+# Load scaling
+#
+$load_scale = <%= @load_scale %>;
+
+#
+# Default color for single metric graphs
+#
+$default_metric_color = "<%= @default_metric_color %>";
+
+#
+# Default metric 
+#
+$default_metric = "<%= @default_metric %>";
+
+#
+# remove the domainname from the FQDN hostnames in graphs
+# (to help with long hostnames in small charts)
+#
+$strip_domainname = "<%= @strip_domainname %>";
+
+#
+# Optional summary graphs
+#
+#$optional_graphs = array('packet');
+
+# 
+# Time ranges
+# Each value is the # of seconds in that range.
+#
+$time_ranges = array(
+<% @time_ranges.each do |k,v| -%>
+   '<%= k %>' => <%= v %>,
+<% end -%>
+);
+
+# this key must exist in $time_ranges
+$default_time_range = "<%= @default_time_range %>";
+
+#
+# Graph sizes
+#
+$graph_sizes = array(
+<% @graph_sizes.each do |k,v| -%>
+    '<%= k %>' => array(
+<% v.each do |ck,cv| -%>
+   '<%= ck %>' => <%= cv %>,
+<% end -%>
+    ),
+<% end -%>
+);
+$default_graph_size = "<%= @default_graph_size %>";
+$graph_sizes_keys = array_keys( $graph_sizes );
+
+# In earlier versions of gmetad, hostnames were handled in a case
+# sensitive manner
+# If your hostname directories have been renamed to lower case,
+# set this option to 0 to disable backward compatibility.
+# From version 3.2, backwards compatibility will be disabled by default.
+# default: true  (for gmetad < 3.2)
+# default: false (for gmetad >= 3.2)
+$case_sensitive_hostnames = "<%= @case_sensitive_hostnames %>";
+?>

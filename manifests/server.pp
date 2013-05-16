@@ -43,4 +43,13 @@ class ganglia::server (
     content => template('ganglia/gmetad.conf');
   }
 
+  if ($::osfamily == 'Debian') {
+    file {'/etc/init.d/gmetad':
+      ensure  => present,
+      source  => 'puppet:///modules/ganglia/gmetad.init',
+      require => Package['ganglia_server'],
+      notify  => Service[$ganglia_server_pkg],
+    }
+  }
+
 }

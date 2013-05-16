@@ -1,0 +1,11 @@
+/* Ganglia::Collection_Group - <%= @name %> */
+collection_group {
+<% if @collect_once -%>
+  collect_once = yes
+<% end -%>
+<% if @collect_every -%>
+  collect_every = <%= @collect_every %>
+<% end -%>
+<% if @time_threshold -%>
+  time_threshold = <%= @time_threshold %>
+<% end -%>

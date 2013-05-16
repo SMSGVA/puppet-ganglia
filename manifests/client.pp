@@ -113,4 +113,30 @@ class ganglia::client (
     content => template('ganglia/gmond.conf'),
     notify  => Service[$ganglia_client_service];
   }
+
+  include concat::setup
+  file {
+    '/etc/ganglia/conf.d':
+        ensure  => directory,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0755',
+        recurse => true,
+        purge   => true;
+  }
+  concat {
+    '/etc/ganglia/conf.d/modules.conf':
+        notify  => Service[ $ganglia_client_service ],
+        require => File[ '/etc/ganglia/conf.d' ];
+  }
+  concat::fragment {
+    'ganglia-modules-header':
+        target  => '/etc/ganglia/conf.d/modules.conf',
+        order   => 10,
+        content => "modules {\n";
+    'ganglia-modules-footer':
+        target  => '/etc/ganglia/conf.d/modules.conf',
+        order   => 99,
+        content => '}';
+  }
 }

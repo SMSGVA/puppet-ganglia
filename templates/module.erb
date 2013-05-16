@@ -1,0 +1,19 @@
+  module {
+    name = "<%= @name %>"
+<% if @path -%>
+    path = "<%= @path %>"
+<% end -%>
+<% if @language -%>
+    language = "<%= @language %>"
+<% end -%>
+<% if @params -%>
+    params = "<%= @params %>"
+<% end -%>
+<% if @param -%>
+    <% @param.each do |k,v| -%>
+    param <%= k %> {
+        value = <%= v %>
+    }
+    <% end -%>
+<% end -%>
+  }

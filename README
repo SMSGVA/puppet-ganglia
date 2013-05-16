@@ -14,3 +14,267 @@ http://sourceforge.net/apps/trac/ganglia/wiki/ganglia_quick_start
 This module is published under the Apache 2.0 license - http://www.apache.org/licenses/LICENSE-2.0
 
 Requires puppet-concat module: https://github.com/puppet-modules/puppet-concat.git
+
+=====
+
+Sample Usage:
+
+node 'hostname' {
+    class {
+        'ganglia::client':
+            cluster => 'mycluster',
+    }
+    # Begin - Default Ganglia Module and Metric Config
+    ganglia::module {
+        'core_metrics':
+            path    => false,
+            deploy  => false;
+        'cpu_module':
+            path    => '/usr/lib/ganglia/modcpu.so',
+            deploy  => false;
+        'disk_module':
+            path    => '/usr/lib/ganglia/moddisk.so',
+            deploy  => false;
+        'load_module':
+            path    => '/usr/lib/ganglia/modload.so',
+            deploy  => false;
+        'mem_module':
+            path    => '/usr/lib/ganglia/modmem.so',
+            deploy  => false;
+        'net_module':
+            path    => '/usr/lib/ganglia/modnet.so',
+            deploy  => false;
+        'proc_module':
+            path    => '/usr/lib/ganglia/modproc.so',
+            deploy  => false;
+        'sys_module':
+            path    => '/usr/lib/ganglia/modsys.so',
+            deploy  => false;
+    }
+    ganglia::collection_group {
+        'Heartbeat':
+            collect_once    => true,
+            time_threshold  => 20,
+            collect_every   => false;
+    }
+
+    ganglia::collection_group {
+        'General_Info':
+            collect_once    => true,
+            time_threshold  => 1200,
+            collect_every   => false;
+    }
+    ganglia::metric {
+        'cpu_num':
+            collection_group    => 'General_Info',
+            title               => 'CPU Count';
+        'cpu_speed':
+            collection_group    => 'General_Info',
+            title               => 'CPU Speed';
+        'mem_total':
+            collection_group    => 'General_Info',
+            title               => 'Memory Total';
+        'swap_total':
+            collection_group    => 'General_Info',
+            title               => 'Swap Space Total';
+        'boottime':
+            collection_group    => 'General_Info',
+            title               => 'Last Boot Time';
+        'machine_type':
+            collection_group    => 'General_Info',
+            title               => 'Machine Type';
+        'os_name':
+            collection_group    => 'General_Info',
+            title               => 'Operating System';
+        'os_release':
+            collection_group    => 'General_Info',
+            title               => 'Operating System Release';
+        'location':
+            collection_group    => 'General_Info',
+            title               => 'Location';
+    }
+
+    ganglia::collection_group {
+        'Gexec':
+            collect_once    => true,
+            time_threshold  => 300,
+            collect_every   => false;
+    }
+    ganglia::metric {
+        'gexec':
+            collection_group    => 'Gexec',
+            title               => 'Gexec Status';
+    }
+
+    ganglia::collection_group {
+        'CPU_Stats':
+            collect_every   => 20,
+            time_threshold  => 90;
+    }
+    ganglia::metric {
+        'cpu_user':
+            collection_group    => 'CPU_Stats',
+            value_threshold     => '1.0',
+            title               => 'CPU User';
+        'cpu_system':
+            collection_group    => 'CPU_Stats',
+            value_threshold     => '1.0',
+            title               => 'CPU System';
+        'cpu_idle':
+            collection_group    => 'CPU_Stats',
+            value_threshold     => '5.0',
+            title               => 'CPU Idle';
+        'cpu_nice':
+            collection_group    => 'CPU_Stats',
+            value_threshold     => '1.0',
+            title               => 'CPU Nice';
+        'cpu_aidle':
+            collection_group    => 'CPU_Stats',
+            value_threshold     => '5.0',
+            title               => 'CPU aidle';
+        'cpu_wio':
+            collection_group    => 'CPU_Stats',
+            value_threshold     => '1.0',
+            title               => 'CPU wio';
+        'cpu_intr':
+            collection_group    => 'CPU_Stats',
+            value_threshold     => '1.0',
+            title               => 'CPU intr';
+        'cpu_sintr':
+            collection_group    => 'CPU_Stats',
+            value_threshold     => '1.0',
+            title               => 'CPU sintr';
+    }
+
+    ganglia::collection_group {
+        'Load_Averages':
+            collect_every   => 20,
+            time_threshold  => 90;
+    }
+    ganglia::metric {
+        'load_one':
+            title               => 'One Minute Load Average',
+            value_threshold     => '1.0',
+            collection_group    => 'Load_Averages';
+        'load_five':
+            title               => 'Five Minute Load Average',
+            value_threshold     => '1.0',
+            collection_group    => 'Load_Averages';
+        'load_fifteen':
+            title               => 'Fifteen Minute Load Average',
+            value_threshold     => '1.0',
+            collection_group    => 'Load_Averages';
+    }
+
+    ganglia::collection_group {
+        'Processes':
+            collect_every   => 80,
+            time_threshold  => 950;
+    }
+    ganglia::metric {
+        'proc_run':
+            title               => 'Total Running Processes',
+            value_threshold     => '1.0',
+            collection_group    => 'Processes';
+        'proc_total':
+            title               => 'Total Processes',
+            value_threshold     => '1.0',
+            collection_group    => 'Processes';
+    }
+
+    ganglia::collection_group {
+        'Memory_Stats':
+            collect_every   => 40,
+            time_threshold  => 180;
+    }
+    ganglia::metric {
+        'mem_free':
+            title               => 'Free Memory',
+            value_threshold     => '1024.0',
+            collection_group    => 'Memory_Stats';
+        'mem_shared':
+            title               => 'Shared Memory',
+            value_threshold     => '1024.0',
+            collection_group    => 'Memory_Stats';
+        'mem_buffers':
+            title               => 'Memory Buffers',
+            value_threshold     => '1024.0',
+            collection_group    => 'Memory_Stats';
+        'mem_cached':
+            title               => 'Cached Memory',
+            value_threshold     => '1024.0',
+            collection_group    => 'Memory_Stats';
+        'swap_free':
+            title               => 'Free Swap Space',
+            value_threshold     => '1024.0',
+            collection_group    => 'Memory_Stats';
+    }
+
+    ganglia::collection_group {
+        'Network':
+            collect_every   => 40,
+            time_threshold  => 300;
+    }
+    ganglia::metric {
+        'bytes_out':
+            title               => 'Bytes Sent',
+            value_threshold     => '4096',
+            collection_group    => 'Network';
+        'bytes_in':
+            title               => 'Bytes Received',
+            value_threshold     => '4096',
+            collection_group    => 'Network';
+        'pkts_out':
+            title               => 'Packets Sent',
+            value_threshold     => '256',
+            collection_group    => 'Network';
+        'pkts_in':
+            title               => 'Packets Received',
+            value_threshold     => '256',
+            collection_group    => 'Network';
+    }
+
+    ganglia::collection_group {
+        'Disk_-_Static':
+            collect_every   => 1800,
+            time_threshold  => 3600;
+    }
+    ganglia::metric {
+        'disk_total':
+            title               => 'Total Disk Space',
+            value_threshold     => '1.0',
+            collection_group    => 'Disk_-_Static';
+    } 
+
+    ganglia::collection_group {
+        'Disk':
+            collect_every   => 40,
+            time_threshold  => 180;
+    }
+    ganglia::metric {
+        'disk_free':
+            title               => 'Disk Space Available',
+            value_threshold     => '1.0',
+            collection_group    => 'Disk';
+        'part_max_used':
+            title               => 'Maximum Disk Space Used',
+            value_threshold     => '1.0',
+            collection_group    => 'Disk';
+    }
+    # End - Default Ganglia Module and Metric Config
+    ganglia::module {
+        'cputemp_module':
+            language    => 'bash';
+    }
+    ganglia::collection_group {
+        'CPU_Temperature':
+            collect_every   => 600,
+            time_threshold  => 20;
+    }
+    ganglia::metric {
+        'cputemp':
+            title               => 'CPU Temperatures',
+            value_threshold     => '70',
+            collection_group    => 'CPU_Temperature';
+    }
+}

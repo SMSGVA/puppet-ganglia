@@ -28,8 +28,6 @@ class ganglia::server (
   $enable_service = true,
   ) {
 
-  include ganglia::client
-
   $ganglia_server_pkg = 'gmetad'
 
   package {$ganglia_server_pkg:
